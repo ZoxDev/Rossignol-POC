@@ -35,8 +35,8 @@ const getRandomTrack = async () => {
                 ...trackList4.tracks.track,
                 ...trackList5.tracks.track
             ]
-        }
-    }
+        } 
+    } 
 
     // Get a random index at the page 
     const randomTrackIndex = Math.floor(Math.random() * trackList.tracks.track.length);
@@ -45,36 +45,42 @@ const getRandomTrack = async () => {
     const trackName = trackList.tracks.track[randomTrackIndex].name;
     const trackArtist = trackList.tracks.track[randomTrackIndex].artist.name;
 
-    return {trackName, trackArtist};
+    console.group('Random Track');
+    console.log(trackList);
+    console.log(randomTrackIndex);
+    console.groupEnd();
+
+    return { trackName, trackArtist };
 };
 
-const playNext = async () => {
+
+
+const playSimilarNext = async () => {
     // Get a similar song and play (also random)
-    // http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=cher&track=believe&api_key=YOUR_API_KEY&format=json
-    
-}
+
+};
 
 const playPrev = async () => {
     // Get the last song
 
-}
+};
 
 const playRandomTrack = async () => {
     const trackUrl = await getRandomTrack();
 
-    // Search on youtube
-    fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${trackUrl.trackName} ${trackUrl.trackArtist}&key=${API_KEY_YT}`)
-        .then(res => res.json())
+    // Search on youtube old method
+    fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${trackUrl.trackName} ${trackUrl.trackArtist}&key=${API_KEY_YT}`).then(res => res.json())
         .then(data => {
             const videoId = data.items[0].id.videoId;
+            console.log(data)
             playVideo(videoId);
-            console.log('https://www.youtube.com/embed/'+videoId);
         })
 
-    // Play the video
     const playVideo = (videoId) => {
         const player = document.getElementById('player');
-        player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-    }
-    
-}
+        const embedUrl = new URL(`https://cdpn.io/pen/debug/oNPzxKo?v=${videoId}`);
+        embedUrl.searchParams.set('autoplay', '1');
+
+        player.src = embedUrl.href;
+    };
+};
