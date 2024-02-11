@@ -1,5 +1,11 @@
 {
-  "dependencies": {
-    "youtube-search-api": "^1.2.1"
-  }
+  "name": "client",
+  "description": "Proof of concept of rossingol just try to get random music (credible)",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
 }
