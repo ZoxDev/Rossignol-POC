@@ -1,28 +1,29 @@
 // Utils
 // Get track
-import getRandomTrack from './utils/getRandomTrack';
+import getRandomTrack from './utils/getRandomTrack.js';
 // Search the song
-import searchSongOnYT from './utils/searchSongOnYT';
+import searchSongOnYT from './utils/searchSongOnYT.js';
 // Play the song
-import playVideo from './utils/playVideo';
+import playVideo from './utils/playVideo.js';
 
 // Gen variables
 let lastSongPlayedID = "";
 let userSelect = 'Random';
 
-const playPrev = async (lastSongPlayedID) => {
+const playPrev = (lastSongPlayedID) => {
     // If user choose it play the previous song
     playVideo(lastSongPlayedID);
 };
 
-const playNext = async (randomOrSimilar, duration, similarInfo) => {
-    setTimeout(() => {
-        if (randomOrSimilar == 'Random') {
-            playTrack();
-        } else {
-            playSimilar(similarInfo);
-        }
-    }, duration);
+const playNext = (randomOrSimilar, similarInfo) => {
+    console.log(randomOrSimilar, similarInfo);
+    if (randomOrSimilar == 'Random') {
+        console.log('Play next random song');
+        playTrack();
+    } else {
+        console.log(`Play next similar song`);
+        playSimilar(similarInfo);
+    }
 }
 
 // Play similar song function
@@ -43,22 +44,14 @@ const playSimilar = async (trackList) => {
     playVideo(songInfo.videoId);
 
     // On duration play next song if user choose nothing go random if he choose similar go for similar
-    playNext(songInfo.durationInMS, userSelect, trackList);
+    setTimeout(() => {
+        playNext(userSelect, trackList);
+    }, songInfo.durationInMS);
 }
 
 // Basic play sound full random
 const playTrack = async (genre, year) => {
-    console.log('Playing a track')
-    console.log(genre, year);
-
-    // Get a track name & artist
-    if (genre == "" & year == "") {
-        const trackUrl = await getRandomTrack();
-        return trackUrl;
-    }
-    else {
-        // Play song filtered
-    }
+    const trackUrl = await getRandomTrack();
 
     // Find the corresponding song id & duration
     const songInfo = await searchSongOnYT(trackUrl);
@@ -67,16 +60,27 @@ const playTrack = async (genre, year) => {
     playVideo(songInfo.videoId);
 
     // On duration play next song if user choose nothing go random if he choose similar go for similar
-    playNext(songInfo.durationInMS, userSelect, trackUrl.trackList);
+    console.log(`Time before next song ${songInfo.durationInMS}`);
+    setTimeout(() => {
+        playNext(userSelect);
+    }, songInfo.durationInMS);
 };
 
 
 // Event 
-console.log("yes the js is read")
+// 
 document.getElementById('playTrack').addEventListener('click', playTrack);
+
 
 // TODO 
 // User can select Similar or random 
 // User can click on next and play a next song depends on what he choose 
 // User can press play prev (& do logic behind it)
 // Real time management cahnge duration on pause 
+
+// To fix : 
+// When you wait for next song it's worked but if you click play song btn after a song is played the next song gonna came faster (Try to log to see what happen)
+
+
+// Questions ?
+// - Why can't use module on local so you have to dl live-server
