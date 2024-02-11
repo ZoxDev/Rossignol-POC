@@ -1,5 +1,4 @@
 const API_KEY_FM = '373666dcd889ddc937f6babdabf6c513';
-const API_KEY_YT = 'AIzaSyA8KvJB1dYgnh6ROpYW8YNwLVq-aNEwfsw';
 
 // Get a list of all the tags and get a random one
 // http://ws.audioscrobbler.com/2.0/?method=chart.gettoptags&api_key=YOUR_API_KEY&format=json
@@ -48,33 +47,42 @@ const getRandomTrack = async () => {
     return { trackName, trackArtist };
 };
 
+const playVideo = (videoId) => {
+    const player = document.getElementById('player');
+    const embedUrl = new URL(`https://cdpn.io/pen/debug/oNPzxKo?v=${videoId}`);
+    embedUrl.searchParams.set('autoplay', '1');
 
-
-const playSimilarNext = async () => {
-    // Get a similar song and play (also random)
-
+    player.src = embedUrl.href;
 };
+
+// Application
 
 const playPrev = async () => {
     // Get the last song
 
 };
 
+// Basic play sound full random
 const playRandomTrack = async () => {
     const trackUrl = await getRandomTrack();
 
-    const playVideo = (videoId) => {
-        const player = document.getElementById('player');
-        const embedUrl = new URL(`https://cdpn.io/pen/debug/oNPzxKo?v=${videoId}`);
-        embedUrl.searchParams.set('autoplay', '1');
-
-        player.src = embedUrl.href;
-    };
-
     // Search with the back-end do
     const searchForVideo = await fetch(`http://localhost:3030/getVideo/?artist=${trackUrl.trackArtist}&title=${trackUrl.trackName}`).then((res) => res.json());
-    console.log(searchForVideo.results[0].id);
     const videoId = searchForVideo.results[0].id;
+    const durationInMS = searchForVideo.results[0].duration.seconds * 1000;
 
     playVideo(videoId);
+
+    // On duration play next song if user choose nothing go random if he choose similar go for similar
+    setTimeout(() => {
+        if(userSelect = 'Random'){
+            playRandomTrack()
+        }else{
+            // Play similar
+        }
+    }, durationInMS);
 };
+
+//Play song filtered
+
+
