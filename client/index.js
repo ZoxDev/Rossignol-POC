@@ -45,11 +45,6 @@ const getRandomTrack = async () => {
     const trackName = trackList.tracks.track[randomTrackIndex].name;
     const trackArtist = trackList.tracks.track[randomTrackIndex].artist.name;
 
-    console.group('Random Track');
-    console.log(trackList);
-    console.log(randomTrackIndex);
-    console.groupEnd();
-
     return { trackName, trackArtist };
 };
 
@@ -68,17 +63,6 @@ const playPrev = async () => {
 const playRandomTrack = async () => {
     const trackUrl = await getRandomTrack();
 
-    // Search on youtube old method
-    // fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${trackUrl.trackName} ${trackUrl.trackArtist}&key=${API_KEY_YT}`).then(res => res.json())
-    //     .then(data => {
-    //         const videoId = data.items[0].id.videoId;
-    //         console.log(data)
-    //         playVideo(videoId);
-    //     })
-
-    // Instead of fetch with google api go for end point on adonis (Cauz more backend feature will come)
-    
-
     const playVideo = (videoId) => {
         const player = document.getElementById('player');
         const embedUrl = new URL(`https://cdpn.io/pen/debug/oNPzxKo?v=${videoId}`);
@@ -86,4 +70,11 @@ const playRandomTrack = async () => {
 
         player.src = embedUrl.href;
     };
+
+    // Search with the back-end do
+    const searchForVideo = await fetch(`http://localhost:3030/getVideo/?artist=${trackUrl.trackArtist}&title=${trackUrl.trackName}`).then((res) => res.json());
+    console.log(searchForVideo.results[0].id);
+    const videoId = searchForVideo.results[0].id;
+
+    playVideo(videoId);
 };
