@@ -69,12 +69,15 @@ const playRandomTrack = async () => {
     const trackUrl = await getRandomTrack();
 
     // Search on youtube old method
-    fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${trackUrl.trackName} ${trackUrl.trackArtist}&key=${API_KEY_YT}`).then(res => res.json())
-        .then(data => {
-            const videoId = data.items[0].id.videoId;
-            console.log(data)
-            playVideo(videoId);
-        })
+    // fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${trackUrl.trackName} ${trackUrl.trackArtist}&key=${API_KEY_YT}`).then(res => res.json())
+    //     .then(data => {
+    //         const videoId = data.items[0].id.videoId;
+    //         console.log(data)
+    //         playVideo(videoId);
+    //     })
+
+    // Instead of fetch with google api go for end point on adonis (Cauz more backend feature will come)
+    
 
     const playVideo = (videoId) => {
         const player = document.getElementById('player');
