@@ -69,7 +69,10 @@ const playTrack = async (genre, year) => {
 
 // Event 
 // 
-document.getElementById('playTrack').addEventListener('click', playTrack);
+document.getElementById('playTrack').addEventListener('click', () => {
+    clearTimeout(currentTimeout);
+    playTrack();
+});
 
 
 // TODO 
@@ -77,10 +80,6 @@ document.getElementById('playTrack').addEventListener('click', playTrack);
 // User can click on next and play a next song depends on what he choose 
 // User can press play prev (& do logic behind it)
 // Real time management cahnge duration on pause 
-
-// To fix : 
-// When you wait for next song it's worked but if you click play song btn after a song is played the next song gonna came faster (Try to log to see what happen)
-
 
 // Questions ?
 // - Why can't use module on local so you have to dl live-server
