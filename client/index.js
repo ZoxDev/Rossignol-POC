@@ -1,75 +1,59 @@
 // Utils
-// Get track
-import getRandomTrack from './utils/getRandomTrackList.js';
-// Search the song
-import searchSongOnYT from './utils/searchSongOnYT.js';
-// Play the song
-import playVideo from './utils/playVideo.js';
+// Get tracklist
+import getRandomTrackList from "./utils/getRandomTrackList.js";
+// Get Track
+import getRandomTrack from "./utils/getRandomTrack.js";
+// Search track
+import searchSongOnY from "./utils/searchSongOnY.js"
+// Play tack
+import playVideo from "./utils/playVideo.js"
 
-const playPrev = (lastSongPlayedID) => {
-    // If user choose it play the previous song
-    playVideo(lastSongPlayedID);
-};
+// Play track random or similar
+document.getElementById('playTrack').addEventListener('click', async (element) => {
+    let trackInfo = {};
+    let trackList = [];
 
-const playNext = (randomOrSimilar, similarInfo) => {
-    if (randomOrSimilar == 'Random') {
-        playTrack();
+    if (userChoice == 'Random') {
+        // Get a random track list
+        const randomTrackList = await getRandomTrackList();
+        trackList = randomTrackList;
+        // Get a random track inside the track list
+        const randomTrack = getRandomTrack(trackList);
+        // Search the track on youtube
+        const getTrackInfo = await searchSongOnY(randomTrack);
+        trackInfo = {
+            videoId: getTrackInfo.videoId,
+            duration: getTrackInfo.durationInMS
+        }
     } else {
-        playSimilar(similarInfo);
-    }
-}
-
-// Play similar song function
-const playSimilar = async (trackList) => {
-    console.log(`Play similar track`);
-    // Get a random index at the page 
-    const randomTrackIndex = Math.floor(Math.random() * trackList.tracks.track.length);
-
-    // Track info for the search
-    const track = {
-        trackName: trackList.tracks.track[randomTrackIndex].name,
-        trackArtist: trackList.tracks.track[randomTrackIndex].artist.name
+        // Get a random track inside the track list (Similar to last one)
+        const randomTrack = getRandomTrack(trackList);
+        // Search the track on youtube
+        const getTrackInfo = await searchSongOnY(randomTrack);
+        trackInfo = {
+            videoId: getTrackInfo.videoId,
+            duration: getTrackInfo.durationInMS
+        }
     }
 
-    // Find the corresponding song id & duration
-    const songInfo = await searchSongOnYT(track);
-
-    // Play the song
-    playVideo(songInfo.videoId);
-
-    // On duration play next song if user choose nothing go random if he choose similar go for similar
-    timeOut = setTimeout(() => {
-        playNext(userSelect, trackList);
-    }, songInfo.durationInMS);
-
-    return timeOut;
-}
-
-// Event 
-// Play track
-document.getElementById('playTrack').addEventListener('click', async () => {
-    const track = await getRandomTrack();
-
-    // Find the corresponding song id & duration
-    const songInfo = await searchSongOnYT(track);
-
-    // Store id for last song played
-
-    // Play the songclearTimeout(currentTimeout);
-    playVideo(songInfo.videoId);
+    // Finally play the track
+    playVideo(trackInfo.videoId)
 
     // On end re-play (See if yt event)
     timeOut = setTimeout(() => {
-        playNext(userSelect, trackList);
-    }, songInfo.durationInMS);
+        element.click();
+    }, trackInfo.duration);
 });
 
-// Select random or similar
+// User select random or similar
 const selectedEl = document.getElementById('select');
 const btnUpdate = document.getElementById('btnUpdate');
+let userChoice = 'Random';
 
 btnUpdate.onclick = (event) => {
     event.preventDefault();
-    userSelect = selectedEl.value;
-    console.log(userSelect);
+    const userChoice = selectedEl.value;
+    console.log(userChoice);
+
+    return userChoice;
 }

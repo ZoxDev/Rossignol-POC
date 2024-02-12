@@ -22,7 +22,7 @@ const getRandomTrackList = async () => {
         searchParams.set("format", `json`);
         searchParams.set("limit", `1000`);
         searchParams.set("page", page);
-        return fetch(`${API_URL}${serachParams}`).then(res => res.json)
+        return fetch(`${API_URL}${searchParams}`).then(res => res.json)
     });
 
     const tracksArrays = await Promise.all(allPages);
