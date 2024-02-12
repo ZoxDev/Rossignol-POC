@@ -12,7 +12,7 @@ const getRandomTrackList = async () => {
     const tagName = randomTag.tags.tag[randomTagIndex].name;
 
     // Get a track name from the tag
-    const API_URL = 'http://ws.audioscrobbler.com/2.0/';
+    const API_URL = 'http://ws.audioscrobbler.com/2.0/?';
 
     const allPages = [1, 2, 3, 4, 5].map((page) => {
         const searchParams = new URLSearchParams();
@@ -22,13 +22,17 @@ const getRandomTrackList = async () => {
         searchParams.set("format", `json`);
         searchParams.set("limit", `1000`);
         searchParams.set("page", page);
-        return fetch(`${API_URL}${searchParams}`).then(res => res.json)
+
+        return fetch(`${API_URL}${searchParams}`).then(res => res.json);
     });
 
-    const tracksArrays = await Promise.all(allPages);
+    console.log(allPages);
 
-    tracksArrays.reduce((acc, current) => ({ ...acc, ...current }));
+    const tracksArrays = await Promise.all(allPages)
+        .then((tracks) => console.log(tracks))
+        .then((array) => array.reduce((acc, current) => ({ ...acc, ...current })))
 
+    console.log(tracksArrays);
     return tracksArrays;
 };
 

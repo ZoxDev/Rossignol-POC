@@ -4,15 +4,16 @@ import getRandomTrackList from "./utils/getRandomTrackList.js";
 // Get Track
 import getRandomTrack from "./utils/getRandomTrack.js";
 // Search track
-import searchSongOnY from "./utils/searchSongOnY.js"
+import searchSongOnY from "./utils/searchSongOnYT.js"
 // Play tack
 import playVideo from "./utils/playVideo.js"
 
+// Var for track
+let trackInfo = {};
+let trackList = [];
+
 // Play track random or similar
 document.getElementById('playTrack').addEventListener('click', async (element) => {
-    let trackInfo = {};
-    let trackList = [];
-
     if (userChoice == 'Random') {
         // Get a random track list
         const randomTrackList = await getRandomTrackList();
