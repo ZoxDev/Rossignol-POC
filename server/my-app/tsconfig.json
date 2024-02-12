@@ -3,6 +3,5 @@
     "strict": true,
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
-    "lib": ["ES2015", "dom"],
   }
 }
