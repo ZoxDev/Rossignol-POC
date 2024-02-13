@@ -23,17 +23,19 @@ const getRandomTrackList = async () => {
         searchParams.set("limit", `1000`);
         searchParams.set("page", page);
 
-        return fetch(`${API_URL}${searchParams}`).then(res => res.json);
+        return fetch(`${API_URL}${searchParams}`).then(res => res.json());
     });
 
-    console.log(allPages);
-
-    const tracksArrays = await Promise.all(allPages)
-        .then((tracks) => console.log(tracks))
-        .then((array) => array.reduce((acc, current) => ({ ...acc, ...current })))
-
-    console.log(tracksArrays);
-    return tracksArrays;
+    const allTracks = {}
+    await Promise.all(allPages)
+        .then(results => {
+            Object.assign(allTracks, results);
+        });
+        
+        // Destruct the 5 object of 1000 item to made one object
+        console.log(allTracks)
+    
+    return allTracks;
 };
 
 export default getRandomTrackList;
