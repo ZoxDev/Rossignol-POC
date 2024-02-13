@@ -19,10 +19,7 @@ const playTrackElement = document.getElementById('playTrack');
 playTrackElement.addEventListener('click', async () => {
     // Clear prev tiemout
     clearTimeout(timeout);
-
-    console.log(userChoice);
     if (userChoice == 'Random') {
-        console.log("Get a random song")
         // Get a random track list
         const randomTrackList = await getRandomTrackList();
         trackList = randomTrackList;
@@ -35,7 +32,6 @@ playTrackElement.addEventListener('click', async () => {
             duration: getTrackInfo.durationInMS
         }
     } else if (userChoice == 'Similar') {
-        console.log("Get a similar song");
         // Get a random track inside the track list (Similar to last one)
         const randomTrack = getRandomTrack(trackList);
         // Search the track on youtube
@@ -47,7 +43,7 @@ playTrackElement.addEventListener('click', async () => {
     }
 
     // Finally play the track
-    playVideo(trackInfo.videoId)
+    playVideo(trackInfo.videoId);
 
     // On end re-play (See if yt event)
     // With react do hook useClock that get event (Pause play)
@@ -62,8 +58,12 @@ const btnUpdate = document.getElementById('btnUpdate');
 
 btnUpdate.onclick = (event) => {
     event.preventDefault();
-    userChoice = selectedEl.value;
-    console.log(userChoice);
+    userChoice = selectedEl.value;;
 
     return userChoice;
 }
+
+// Next song btn
+document.getElementById('next').addEventListener("click", () => {
+    playTrackElement.click();
+});
