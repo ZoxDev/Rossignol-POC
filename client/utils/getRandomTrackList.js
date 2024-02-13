@@ -26,16 +26,15 @@ const getRandomTrackList = async () => {
         return fetch(`${API_URL}${searchParams}`).then(res => res.json());
     });
 
-    const allTracks = {}
+    let allTracks = new Array;
     await Promise.all(allPages)
         .then(results => {
-            Object.assign(allTracks, results);
+            results.forEach(result => {
+              allTracks = allTracks.concat(result.tracks.track);
+            })
         });
-        
-        // Destruct the 5 object of 1000 item to made one object
-        console.log(allTracks)
-    
+
     return allTracks;
 };
 
-export default getRandomTrackList;
+export default getRandomTrackList;Tu 

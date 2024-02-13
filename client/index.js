@@ -8,13 +8,21 @@ import searchSongOnY from "./utils/searchSongOnYT.js"
 // Play tack
 import playVideo from "./utils/playVideo.js"
 
-// Var for track
+// genVar
 let trackInfo = {};
 let trackList = [];
+let userChoice = 'Random';
+let timeout = null;
 
 // Play track random or similar
-document.getElementById('playTrack').addEventListener('click', async (element) => {
+const playTrackElement = document.getElementById('playTrack');
+playTrackElement.addEventListener('click', async () => {
+    // Clear prev tiemout
+    clearTimeout(timeout);
+
+    console.log(userChoice);
     if (userChoice == 'Random') {
+        console.log("Get a random song")
         // Get a random track list
         const randomTrackList = await getRandomTrackList();
         trackList = randomTrackList;
@@ -26,7 +34,8 @@ document.getElementById('playTrack').addEventListener('click', async (element) =
             videoId: getTrackInfo.videoId,
             duration: getTrackInfo.durationInMS
         }
-    } else {
+    } else if (userChoice == 'Similar') {
+        console.log("Get a similar song");
         // Get a random track inside the track list (Similar to last one)
         const randomTrack = getRandomTrack(trackList);
         // Search the track on youtube
@@ -41,19 +50,19 @@ document.getElementById('playTrack').addEventListener('click', async (element) =
     playVideo(trackInfo.videoId)
 
     // On end re-play (See if yt event)
-    timeOut = setTimeout(() => {
-        element.click();
+    // With react do hook useClock that get event (Pause play)
+    timeout = setTimeout(() => {
+        playTrackElement.click();
     }, trackInfo.duration);
 });
 
 // User select random or similar
 const selectedEl = document.getElementById('select');
 const btnUpdate = document.getElementById('btnUpdate');
-let userChoice = 'Random';
 
 btnUpdate.onclick = (event) => {
     event.preventDefault();
-    const userChoice = selectedEl.value;
+    userChoice = selectedEl.value;
     console.log(userChoice);
 
     return userChoice;
