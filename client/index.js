@@ -76,13 +76,12 @@ document.getElementById('next').addEventListener("click", () => {
 // Prev song btn
 document.getElementById('prev').addEventListener("click", () => {
     // Check if there is a track in history
+    clearTimeout(timeout);
     if (trackHistory.length > 1) {
         // Remove current track from history
         trackHistory.pop();
-        console.log(trackHistory);
         // Get the previous track
         const prevTrackInfo = trackHistory[trackHistory.length - 1]
-        console.log(trackHistory);
         // Play the previous track
         playVideo(prevTrackInfo.videoId);
 
@@ -90,6 +89,6 @@ document.getElementById('prev').addEventListener("click", () => {
         // With react do hook useClock that get event (Pause play)
         timeout = setTimeout(() => {
             playTrackElement.click();
-        }, trackInfo.duration);
+        }, prevTrackInfo.duration);
     }
 });
