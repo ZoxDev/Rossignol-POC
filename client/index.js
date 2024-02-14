@@ -13,6 +13,7 @@ let trackInfo = {};
 let trackList = [];
 let userChoice = 'Random';
 let timeout = null;
+let trackHistory = [];
 
 // Play track random or similar
 const playTrackElement = document.getElementById('playTrack');
@@ -42,6 +43,10 @@ playTrackElement.addEventListener('click', async () => {
         }
     }
 
+    // Put the track in history
+    trackHistory.push(trackInfo);
+    console.log(trackHistory);
+
     // Finally play the track
     playVideo(trackInfo.videoId);
 
@@ -66,4 +71,25 @@ btnUpdate.onclick = (event) => {
 // Next song btn
 document.getElementById('next').addEventListener("click", () => {
     playTrackElement.click();
+});
+
+// Prev song btn
+document.getElementById('prev').addEventListener("click", () => {
+    // Check if there is a track in history
+    if (trackHistory.length > 1) {
+        // Remove current track from history
+        trackHistory.pop();
+        console.log(trackHistory);
+        // Get the previous track
+        const prevTrackInfo = trackHistory[trackHistory.length - 1]
+        console.log(trackHistory);
+        // Play the previous track
+        playVideo(prevTrackInfo.videoId);
+
+        // On end re-play (See if yt event)
+        // With react do hook useClock that get event (Pause play)
+        timeout = setTimeout(() => {
+            playTrackElement.click();
+        }, trackInfo.duration);
+    }
 });
